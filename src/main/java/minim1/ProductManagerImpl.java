@@ -13,6 +13,19 @@ public class ProductManagerImpl implements ProductManager {
     private ArrayList<Producto> products;
     final static Logger log = Logger.getLogger(ProductManagerImpl.class);
 
+    public ArrayList<Producto> getProducts() {
+        return products;
+    }
+    public Queue<Pedido> getPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(Queue<Pedido> pedidos) {
+        this.pedidos = pedidos;
+    }
+    public void setProducts(ArrayList<Producto> products) {
+        this.products = products;
+    }
 
     public static ProductManagerImpl getInstance(){
         if (ourInstance==null)
@@ -29,7 +42,7 @@ public class ProductManagerImpl implements ProductManager {
         ArrayList<Producto> productos=products;
 
         Producto p=new Producto();
-        int preu;
+        float preu;
         int pos=0;
         log.info("Productos: "+productos.size()+"productos");
 
@@ -55,16 +68,17 @@ public class ProductManagerImpl implements ProductManager {
     @POST
     @Path("/hacerPedido")
     @Produces(MediaType.APPLICATION_JSON)
-    public void HacerPedido(ArrayList<Producto> productos, ArrayList<Integer> cantidad, String nomUsuari) {
+    public boolean HacerPedido(ArrayList<Producto> productos, ArrayList<Integer> cantidad, String nomUsuari) {
         org.apache.log4j.BasicConfigurator.configure();
         log.info("Pedidos: "+pedidos.size()+" Productos: "+productos.size()+" productos Tamaño cantidades: "+ cantidad.size());
         if (productos.size()!=cantidad.size()){
             log.error("Error en los datos");
-            return;
+            return false;
         }
         Pedido p =new Pedido(productos,cantidad,nomUsuari);
         pedidos.add(p);
         log.info("Pedidos: "+pedidos.size()+" Pedido: Productos: "+productos.size()+" productos Tamaño cantidades: "+ cantidad.size());
+        return true;
     }
 
     @GET
@@ -75,6 +89,9 @@ public class ProductManagerImpl implements ProductManager {
         log.info("Pedidos: "+pedidos.size());
         Pedido p;
         p=pedidos.poll();
+        for (int i=0;i<p.getProductos().size();i++) {
+            p.getProductos().get(i).setVentas(p.getProductos().get(i).getVentas()+p.getCantidad().get(i));
+        }
         log.info("Pedidos: "+pedidos.size());
         return p;
     }

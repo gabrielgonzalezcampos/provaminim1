@@ -4,8 +4,9 @@ import java.util.ArrayList;
 
 public class Producto {
     private String nom;
-    private int preu;
+    private float preu;
     private int ventas;
+    private int id;
 
     public void setNom(String nom) {
         this.nom = nom;
@@ -16,8 +17,11 @@ public class Producto {
     public void setVentas(int ventas) {
         this.ventas = ventas;
     }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public int getPreu() {
+    public float getPreu() {
         return preu;
     }
     public int getVentas() {
@@ -26,12 +30,16 @@ public class Producto {
     public String getNom() {
         return nom;
     }
+    public int getId() {
+        return id;
+    }
 
     public Producto(){
     }
-    public Producto(String nom,int preu,int ventas){
+    public Producto(int id,String nom,float preu,int ventas){
         this.nom=nom;
         this.preu=preu;
         this.ventas=ventas;
+        this.id=id;
     }
 }
