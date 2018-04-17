@@ -11,6 +11,7 @@ public class ProductManagerImpl implements ProductManager {
     private static ProductManagerImpl ourInstance;
     private Queue<Pedido> pedidos;
     private ArrayList<Producto> products;
+    private ArrayList<String> Usuario;
     final static Logger log = Logger.getLogger(ProductManagerImpl.class);
 
     public ArrayList<Producto> getProducts() {
@@ -19,12 +20,36 @@ public class ProductManagerImpl implements ProductManager {
     public Queue<Pedido> getPedidos() {
         return pedidos;
     }
+    public ArrayList<String> getUsuario() {
+        return Usuario;
+    }
+    public String getUsuariobyName(String nom) {
+        int i=0;
+        boolean encontrado=false;
+        while ((i==Usuario.size())||(encontrado))
+        {
+            if (Usuario.get(i)==nom){
+                encontrado=true;
+            }
+            else i++;
+        }
+        return Usuario.get(i);
+    }
 
     public void setPedidos(Queue<Pedido> pedidos) {
         this.pedidos = pedidos;
     }
     public void setProducts(ArrayList<Producto> products) {
         this.products = products;
+    }
+    public void setUsuario(ArrayList<String> usuario) {
+        Usuario = usuario;
+    }
+    public void registre(String nom){
+        this.Usuario.add(nom);
+    }
+    public void addProduct(Producto p){
+        products.add(p);
     }
 
     public static ProductManagerImpl getInstance(){
@@ -34,9 +59,6 @@ public class ProductManagerImpl implements ProductManager {
     }
     private ProductManagerImpl() {}
 
-    @GET
-    @Path("/ordenPrecio")
-    @Produces(MediaType.APPLICATION_JSON)
     public ArrayList ListadoOrdenadoPrecio() {
         org.apache.log4j.BasicConfigurator.configure();
         ArrayList<Producto> productos=products;
@@ -65,9 +87,7 @@ public class ProductManagerImpl implements ProductManager {
         return productos;
     }
 
-    @POST
-    @Path("/hacerPedido")
-    @Produces(MediaType.APPLICATION_JSON)
+
     public boolean HacerPedido(ArrayList<Producto> productos, ArrayList<Integer> cantidad, String nomUsuari) {
         org.apache.log4j.BasicConfigurator.configure();
         log.info("Pedidos: "+pedidos.size()+" Productos: "+productos.size()+" productos Tamaño cantidades: "+ cantidad.size());
@@ -81,9 +101,6 @@ public class ProductManagerImpl implements ProductManager {
         return true;
     }
 
-    @GET
-    @Path("/servirPedido")
-    @Produces(MediaType.APPLICATION_JSON)
     public Pedido ServirPedido() {
         org.apache.log4j.BasicConfigurator.configure();
         log.info("Pedidos: "+pedidos.size());
@@ -96,9 +113,6 @@ public class ProductManagerImpl implements ProductManager {
         return p;
     }
 
-    @GET
-    @Path("/ordenVentas")
-    @Produces(MediaType.APPLICATION_JSON)
     public ArrayList ListadoOrdenadoVentas() {
         org.apache.log4j.BasicConfigurator.configure();
         ArrayList<Producto> productos=products;
