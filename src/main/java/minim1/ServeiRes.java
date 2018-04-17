@@ -14,9 +14,9 @@ public class ServeiRes {
         return ProductManagerImpl.getInstance().ListadoOrdenadoPrecio();
     }
     @POST
-    @Path("/hacerPedido")
+    @Path("/hacerPedido/{productos}/{contidad}/{nom}")
     @Produces(MediaType.APPLICATION_JSON)
-    public int HacerPedido(ArrayList<Integer> productos, ArrayList<Integer> cantidad, String nomUsuari){
+    public int HacerPedido(@PathParam("productos") ArrayList<Integer> productos,@PathParam("cantidad") ArrayList<Integer> cantidad,@PathParam("nom") String nomUsuari){
         ArrayList<Producto> prod=new ArrayList<>();
         if (ProductManagerImpl.getInstance().getUsuariobyName(nomUsuari)==null)
             return -1;
@@ -24,7 +24,7 @@ public class ServeiRes {
             prod.add(ProductManagerImpl.getInstance().getProducts().get(productos.get(i)));
         }
         boolean res=ProductManagerImpl.getInstance().HacerPedido(prod,cantidad,nomUsuari);
-        if (res=true)
+        if (res)
             return 1;
         else return -2;
     }
